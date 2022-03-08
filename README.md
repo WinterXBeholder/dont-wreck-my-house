@@ -16,7 +16,7 @@
 
 # Project Plan
 
-###Design:
+### Design:
 > 
 > Combine Model-View-Controller with Repository+Service designs. Reference sustainable foraging project for examples.
 > 
