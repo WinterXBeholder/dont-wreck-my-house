@@ -17,6 +17,7 @@
 # Project Plan
 
 > ###Design:
+> 
 > Combine Model-View-Controller with Repository+Service designs. Reference sustainable foraging project for examples.
 > 
 > All layers aware of the Model frameworks. Controller connects View and Service by scripting app loop. View creates the
