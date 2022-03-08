@@ -16,7 +16,7 @@
 
 # Project Plan
 
-> ###Design:
+###Design:
 > 
 > Combine Model-View-Controller with Repository+Service designs. Reference sustainable foraging project for examples.
 > 
@@ -30,7 +30,7 @@
 > View or IO. But IO will still have to control validation up to a certain level due to Java being a strictly typed
 > language.
 
-> [] use csv's to create models (host, guest, reservation, result)
+> [X] use csv's to create models (host, guest, reservation, result)
 >
 > [] create data-access layer (repositories)
 > 
