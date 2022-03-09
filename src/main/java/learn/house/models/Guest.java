@@ -1,7 +1,7 @@
 package learn.house.models;
 
 
-import java.math.BigDecimal;
+import java.util.Objects;
 
 /**Guest: A customer. Someone who wants to book a place to stay. Guest data is provided via a zip download.
  *
@@ -66,7 +66,7 @@ public class Guest {
         this.phone = phone;
     }
 
-    public States state() {
+    public States getState() {
         return state;
     }
 
@@ -74,18 +74,24 @@ public class Guest {
         this.state = state;
     }
 
-/*
+    /** Built for unit testing: every field must be equivalent. Can overload as needed.
+     * use like `foo.equals(bar);`
+     * @param o The object to compare to.
+     * @return true means equal
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Guest guest = (Guest) o;
-        return id == guest.id &&
+        return Objects.equals(guestId, guest.guestId) &&
+                Objects.equals(firstName, guest.firstName) &&
                 Objects.equals(lastName, guest.lastName) &&
-                state == guest.state &&
-                Objects.equals(email, guest.email);
+                Objects.equals(email, guest.email) &&
+                Objects.equals(phone, guest.phone) &&
+                state == guest.state;
     }
-*/
+
 /*
     @Override
     public int hashCode() {

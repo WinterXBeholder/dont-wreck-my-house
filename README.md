@@ -32,19 +32,19 @@
 
 > [X] use csv's to create models (host, guest, reservation, result)
 >
-> [] create data-access layer (repositories)
+> [X] create data-access layer (repositories)
 > 
-> [] implement find-by methods
+> [X] implement find-by methods
 > 
-> [] implement write methods
+> [X] implement write methods
 > 
-> [] implement update methods
+> [X] implement update methods
 > 
-> [] implement delete methods
+> [X] implement delete methods
 > 
-> [] create test data-sets
+> [X] create test data-sets
 > 
-> [] test data-access
+> [X] test data-access
 
 > [] create domain layer (Service) to control repositories
 > 
