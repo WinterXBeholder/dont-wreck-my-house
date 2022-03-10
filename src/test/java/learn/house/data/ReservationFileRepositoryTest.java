@@ -37,7 +37,7 @@ class ReservationFileRepositoryTest {
     }
 
     @Test
-    void shouldMakeReservation() throws DataException {
+    void shouldDeserializeReservation() throws DataException {
         List<Reservation> results = repository.findById("2e72f86c-b8fe-4265-b4f1-304dea8762db");
         Reservation sample = new Reservation();
         sample.setId("1");

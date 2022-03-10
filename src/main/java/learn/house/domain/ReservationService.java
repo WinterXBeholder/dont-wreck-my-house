@@ -43,42 +43,60 @@ public class ReservationService {
         return repository.delete(hostId, reservation);
     }
 
-    public Boolean update(String hostId, Reservation reservation) throws DataException {
-        if (reservationTest(hostId, reservation)) {
-            repository.update(hostId, reservation); //assign payload
-            return true;
+    public Result<Reservation> update(String hostId, Reservation reservation) throws DataException {
+        Result<Reservation> result = reservationTest(hostId, reservation);
+        if (result.isSuccess()) {
+            repository.update(hostId, reservation);
+            result.setPayload(reservation);
+            return result;
         }
-        // return error message
-        return false;
+        result.addErrorMessage("Failed to update reservation");
+        return result;
     }
 
-    public Boolean add(String hostId, Reservation reservation) throws DataException {
-        if (reservationTest(hostId, reservation)) {
+    public Result<Reservation> add(String hostId, Reservation reservation) throws DataException {
+        Result<Reservation> result = reservationTest(hostId, reservation);
+        if (result.isSuccess()) {
             repository.add(hostId, reservation); //assign payload
-            return true;
+            result.setPayload(reservation);
+            return result;
         }
-        // return error message
-        return false;
+        result.addErrorMessage("failed to add reservation");
+        return result;
     }
 
-    public Boolean reservationTest(String hostId, Reservation newRes) throws DataException {
+    public Result<Reservation> reservationTest(String hostId, Reservation newRes) throws DataException {
         List<Reservation> current = resByHost(hostId);
-        if ( missingFieldTest(newRes)) {
-            return false;
+        Result<Reservation> result = new Result<>();
+        Result<Reservation> missingFields = missingFieldTest(newRes);
+        if (!missingFields.isSuccess()) {
+            missingFields.getErrorMessages().forEach(m -> result.addErrorMessage(m));
         }
-        Boolean dateOverlap = current.stream().anyMatch(r ->
-                !r.getId().equalsIgnoreCase(newRes.getId()) && overlapTest(r, newRes));
-        if (dateOverlap) {
-            return false;
-        }
-        return true;
+        current.stream().forEach(r -> {
+            if (!r.getId().equalsIgnoreCase(newRes.getId()) && overlapTest(r, newRes)) {
+                result.addErrorMessage(String.format("Date Overlap%nYour dates: %s : %s%nExisting dates: %s : %s",
+                        newRes.getStartDate().toString(), newRes.getEndDate().toString(),
+                        r.getStartDate().toString(), r.getEndDate().toString()));
+            }
+        });
+        return result;
     }
 
-    private Boolean missingFieldTest(Reservation r) {
-        return r.getStartDate() == null ||
-                r.getEndDate() == null ||
-                r.getGuestID() == null ||
-                r.getTotal() == null;
+    private Result<Reservation> missingFieldTest(Reservation r) {
+        Result<Reservation> result = new Result<>();
+        if (r.getStartDate() == null) {
+            result.addErrorMessage("Missing Start Date");
+        }
+        if (r.getEndDate() == null) {
+            result.addErrorMessage("Missing End Date");
+        }
+        if (r.getGuestID() == null) {
+            result.addErrorMessage("Missing Missing Guest ID");
+        }
+        if (r.getTotal() == null) {
+            result.addErrorMessage("Missing Missing Total");
+        }
+        return result;
     }
 
     private Boolean overlapTest(Reservation r, Reservation n) {

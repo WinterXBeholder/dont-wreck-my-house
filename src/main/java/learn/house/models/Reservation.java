@@ -1,8 +1,13 @@
 package learn.house.models;
 
+import learn.house.domain.Response;
+
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /** Reservation:
  One or more days where a Guest has exclusive access to a Location (or Host). Reservation data is provided.
@@ -24,9 +29,41 @@ public class Reservation {
 
     public void setStartDate(LocalDate startDate) {this.startDate = startDate;}
 
+    public Response setStartDate(LocalDate startDate, BigDecimal weekdayRate, BigDecimal weekendRate) {
+        Response result = new Response();
+        if (this.endDate != null){
+            if (!this.endDate.isAfter(startDate)) {
+                result.addErrorMessage(String.format(
+                        "Failed to add Start Date. Must come before end date: %s", this.endDate));
+                return result;
+            }
+            this.startDate = startDate;
+            this.setTotal(weekendRate, weekdayRate);
+            return result;
+        }
+        this.startDate = startDate;
+        return result;
+    }
+
     public LocalDate getEndDate() {return endDate;}
 
     public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
+
+    public Response setEndDate(LocalDate endDate, BigDecimal weekdayRate, BigDecimal weekendRate) {
+        Response result = new Response();
+        if (this.startDate != null){
+            if (!this.startDate.isBefore(endDate)) {
+                result.addErrorMessage(String.format(
+                        "Failed to add End Date. Must come after start date: %s", this.startDate));
+                return result;
+            }
+            this.endDate = endDate;
+            this.setTotal(weekendRate, weekdayRate);
+            return result;
+        }
+        this.endDate = endDate;
+        return result;
+    }
 
     public String getGuestID() {return guestId;}
 
@@ -34,7 +71,18 @@ public class Reservation {
 
     public BigDecimal getTotal() { return total;}
 
-    public void setTotal(BigDecimal total) { this.total = total;}
+    private void setTotal(BigDecimal weekdayRate, BigDecimal weekendRate) {
+        this.total = BigDecimal.ZERO;
+        startDate.datesUntil(endDate).toList().forEach(d -> {
+            DayOfWeek day = DayOfWeek.of(d.get(ChronoField.DAY_OF_WEEK));
+            this.total = this.total.add((day.equals(DayOfWeek.FRIDAY) || day.equals(DayOfWeek.SATURDAY)) ? weekendRate : weekdayRate);
+        });
+        //this.total = sum;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
 
     @Override
     public boolean equals(Object o) {
