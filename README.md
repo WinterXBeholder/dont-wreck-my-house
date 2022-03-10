@@ -96,13 +96,15 @@
 >
 > [] implement data validation - hosts fields
 >
-> [] implement data validation - reservations fields
+> [X] implement data validation - reservations fields
 >
 > [X] implement list building logic based around UI vision, maybe do UI first
 > 
 > [X] create repository doubles
 > 
 > [X] test domain layer
+> 
+> [X] implement response classes for validation feedback
 
 > [] create Controller
 > 
