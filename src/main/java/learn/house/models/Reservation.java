@@ -14,7 +14,7 @@ public class Reservation {
     private LocalDate startDate;
     private LocalDate endDate;
     private String guestId;
-    private BigDecimal total = BigDecimal.ZERO;
+    private BigDecimal total;
 
     public String getId() {return id;}
 

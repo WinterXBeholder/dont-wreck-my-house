@@ -45,8 +45,7 @@ public class ReservationFileRepository implements ReservationRepository {
     @Override
     public Reservation add(String hostId, Reservation reservation) throws DataException {
         List<Reservation> all = findById(hostId);
-        Boolean unique = all.stream().anyMatch(r -> r.equals(reservation));
-        reservation.setId(all.size()==0? "1" : Integer.toString(Integer.parseInt(all.get(all.size()-1).getId())+1));
+        reservation.setId(all.isEmpty()? "1" : Integer.toString(Integer.parseInt(all.get(all.size()-1).getId())+1));
         //TODO: maintain String type for future unique identifier upgrade
         all.add(reservation);
         writeAll(hostId, all);

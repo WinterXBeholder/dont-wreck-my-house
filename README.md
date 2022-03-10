@@ -46,19 +46,63 @@
 > 
 > [X] test data-access
 
-> [] create domain layer (Service) to control repositories
-> 
-> [] implement data validation - users (existing, fields)
+> [X] create domain layer (Service) to control repositories
 >
-> [] implement data validation - hosts (existing, fields)
+
+#### Functionality notes guiding Service creation:
+#### SELECT - Host or Guest:
+1. get search criteria
+2. search all
+3. filter by criteria
+4. select host
+#### RESERVATIONS BY HOST:
+1. SELECT
+2. get all reservations
+3. Sort by start date
+#### Make new Reservation:
+1. SELECT guest
+2. SELECT host
+3. RESERVATIONS BY HOST, but filtered to future
+4. enter start and end dates
+5. OVERLAP CHECKER
+6. calculate total by day
+7. Summary
+8. confirmation
+9. Add Reservation
+#### OVERLAP CHECKER:
+1. given host's reservations array
+2. given start and end dates
+3. loop and return
+#### EDIT RESERVATION
+1. SELECT host
+2. RESERVATIONS BY HOST
+3. filter future
+4. change date
+5. update
+#### CANCEL A RESERVATION
+1. SELECT host
+2. RESERVATIONS BY HOST
+3. filter future
+4. delete
+
+
+> ** Update: intending to integrate the field validation into the model setter methods
 > 
-> [] implement data validation - reservations (existing, fields, date overlap)
+> [X] implement data validation - reservations existing
 > 
-> [] implement list building logic based around UI vision, maybe do UI first
+> [X] implement data validation - reservations date overlap
 > 
-> [] create repository doubles
+> [] implement data validation - users fields
+>
+> [] implement data validation - hosts fields
+>
+> [] implement data validation - reservations fields
+>
+> [X] implement list building logic based around UI vision, maybe do UI first
 > 
-> [] test domain layer
+> [X] create repository doubles
+> 
+> [X] test domain layer
 
 > [] create Controller
 > 
