@@ -53,9 +53,9 @@ public class Controller {
                 case EDIT_A_RESERVATION:
                     editReservation();
                     break;
-//                case CANCEL_A_RESERVATION:
-//                    cancelReservation();
-//                    break;
+                case CANCEL_A_RESERVATION:
+                    cancelReservation();
+                    break;
 //                case ADD_HOST:
 //                    addHost();
 //                    break;
@@ -105,14 +105,14 @@ public class Controller {
         if(guest == null) return;
         Host host = selectHost();
         if( host == null ) return;
-        view.displayHeader("Existing reservations:");
+        view.displayHeader("Existing future reservations:");
         view.printReservations(reservationService.resByHostFuture(host.getId()), host);
         Boolean finish = false;
         while(!finish) {
             Reservation newReservation = new Reservation();
             newReservation = view.getDates(newReservation, host);
             newReservation.setGuestID(guest.getGuestId());
-            finish = !view.displayConfirmation(newReservation);
+            finish = !view.displayDatesConfirmation(newReservation);
             if (finish) {
                 Result result = reservationService.add(host.getId(), newReservation);
                 finish = result.isSuccess();
@@ -126,18 +126,37 @@ public class Controller {
         view.displayHeader(MainMenuOption.EDIT_A_RESERVATION.getMessage());
         Host host = selectHost();
         if( host == null ) return;
-        view.displayHeader("Existing reservations:");
+        view.displayHeader("Existing future reservations:");
         List<Reservation> reservations = reservationService.resByHostFuture(host.getId());
         Reservation oldReservation = view.selectReservation(reservations, host);
         Boolean finish = oldReservation == null;
         while(!finish) {
             Reservation newReservation = oldReservation.duplicate();
             newReservation = view.getDates(newReservation, host);
-            finish = !view.displayConfirmation(newReservation);
+            finish = !view.displayDatesConfirmation(newReservation);
             if (finish) {
                 Result result = reservationService.update(host.getId(), newReservation);
                 finish = result.isSuccess();
                 view.displayStatus(result.isSuccess(), result.getErrorMessages());
+            }
+            view.enterToContinue();
+        }
+    }
+
+    private void cancelReservation() throws DataException {
+        view.displayHeader(MainMenuOption.CANCEL_A_RESERVATION.getMessage());
+        Host host = selectHost();
+        if( host == null ) return;
+        view.displayHeader("Existing future reservations:");
+        List<Reservation> reservations = reservationService.resByHostFuture(host.getId());
+        Boolean finish = reservations==null || reservations.size()==0;
+        while(!finish) {
+            Reservation oldReservation = view.selectReservation(reservations, host);
+            finish = view.displayDeleteConfirmation(oldReservation);
+            if (finish) {
+                Boolean result = reservationService.cancel(host.getId(), oldReservation);
+                finish = result;
+                view.displayStatus(result, result ? "" : "Delete Failed.");
             }
             view.enterToContinue();
         }

@@ -92,9 +92,9 @@
 > 
 > [X] implement data validation - reservations date overlap
 > 
-> [] implement data validation - users fields
+> [X] implement data validation - users fields
 >
-> [] implement data validation - hosts fields
+> [X] implement data validation - hosts fields
 >
 > [X] implement data validation - reservations fields
 >
@@ -122,11 +122,11 @@
 > 
 > [] add guests feature to controller and to view
 > 
-> [] add make reservation feature to controller and view
+> [X] add make reservation feature to controller and view
 > 
-> [] add cancel reservation feature to controller and view
+> [X] add cancel reservation feature to controller and view
 > 
-> [] add edit reservation feature to controller and view
+> [X] add edit reservation feature to controller and view
 
 > [] add Spring dependency injection to the project
 > 

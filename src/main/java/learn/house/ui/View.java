@@ -225,11 +225,17 @@ public class View {
 
 //    displayHeader("Where would you like to go?");
 
-    public Boolean displayConfirmation(Reservation reservation) {
+    public Boolean displayDatesConfirmation(Reservation reservation) {
         io.println("These are your reservation details so far:");
         io.println(formatReservation(Integer.parseInt(reservation.getId()), reservation));
         return io.readBoolean("Would you like to modify these dates before committing?[y or n]");
     }
+    public Boolean displayDeleteConfirmation(Reservation reservation) {
+        io.println("These are the existing reservation details:");
+        io.println(formatReservation(Integer.parseInt(reservation.getId()), reservation));
+        return io.readBoolean("Are you sure you want to cancel? This is permanent. [y or n]");
+    }
+
     public Reservation getDates(Reservation reservation, Host host) {
         while (true) {
             Response response = new Response();
