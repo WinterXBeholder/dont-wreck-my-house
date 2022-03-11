@@ -104,4 +104,14 @@ public class Reservation {
                 Objects.equals(guestId, reservation.guestId) &&
                 total.equals(reservation.total);
     }
+
+    public Reservation duplicate() {
+        Reservation newReservation = new Reservation();
+        newReservation.setId(this.getId());
+        newReservation.setStartDate(getStartDate());
+        newReservation.setEndDate(this.getEndDate());
+        newReservation.setGuestID(this.getGuestID());
+        newReservation.setTotal(this.getTotal());
+        return newReservation;
+    }
 }

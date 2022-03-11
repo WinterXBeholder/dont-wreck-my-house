@@ -50,9 +50,9 @@ public class Controller {
                 case MAKE_NEW_RESERVATION:
                     newReservation();
                     break;
-//                case EDIT_A_RESERVATION:
-//                    editReservation();
-//                    break;
+                case EDIT_A_RESERVATION:
+                    editReservation();
+                    break;
 //                case CANCEL_A_RESERVATION:
 //                    cancelReservation();
 //                    break;
@@ -105,7 +105,7 @@ public class Controller {
         if(guest == null) return;
         Host host = selectHost();
         if( host == null ) return;
-        view.displayMessage("Existing reservations:");
+        view.displayHeader("Existing reservations:");
         view.printReservations(reservationService.resByHostFuture(host.getId()), host);
         Boolean finish = false;
         while(!finish) {
@@ -118,6 +118,28 @@ public class Controller {
                 finish = result.isSuccess();
                 view.displayStatus(result.isSuccess(), result.getErrorMessages());
             }
+            view.enterToContinue();
+        }
+    }
+
+    private void editReservation() throws DataException {
+        view.displayHeader(MainMenuOption.EDIT_A_RESERVATION.getMessage());
+        Host host = selectHost();
+        if( host == null ) return;
+        view.displayHeader("Existing reservations:");
+        List<Reservation> reservations = reservationService.resByHostFuture(host.getId());
+        Reservation oldReservation = view.selectReservation(reservations, host);
+        Boolean finish = oldReservation == null;
+        while(!finish) {
+            Reservation newReservation = oldReservation.duplicate();
+            newReservation = view.getDates(newReservation, host);
+            finish = !view.displayConfirmation(newReservation);
+            if (finish) {
+                Result result = reservationService.update(host.getId(), newReservation);
+                finish = result.isSuccess();
+                view.displayStatus(result.isSuccess(), result.getErrorMessages());
+            }
+            view.enterToContinue();
         }
     }
 

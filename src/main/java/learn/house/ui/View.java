@@ -16,7 +16,7 @@ public class View {
     private final ConsoleIO io;
     private final String hostTemplate = "%-2s: Standard_Rate_$%-6s  Weekend_Rate_$%-6s  Last_Name_%-20s  Phone_%-13s  Email_%-30s  Address_%-30s %-20s %s %s";
     private final String guestTemplate = "%-2s:  Last_Name_%-20s  First_Name_%-20s  Phone_%-13s  Email_%-30s  State:_%s";
-    private final String reservationTemplate = "%-2s: %s_to_%s    Guest:_%s    Total_Cost:_$%.2f%n";
+    private final String reservationTemplate = "%-2s: %s_to_%s    Guest:_%s    Total_Cost:_$%.2f";
 
     public View(ConsoleIO io) {
         this.io = io;
@@ -47,9 +47,6 @@ public class View {
         io.println("");
         io.println(message);
         io.println("=".repeat(message.length()));
-    }
-    public void displayMessage(String message) {
-        io.println(message);
     }
 
 
@@ -82,9 +79,9 @@ public class View {
                 guest.getPhone(), guest.getEmail(), guest.getState());
     }
 
-    private String formatReservation (Reservation reservation) {
+    private String formatReservation (int index, Reservation reservation) {
         return String.format(reservationTemplate,
-                reservation.getId()==null? "" : reservation.getId(),
+                index++,
                 reservation.getStartDate(),
                 reservation.getEndDate(),
                 reservation.getGuestID(),
@@ -151,12 +148,37 @@ public class View {
             return;
         }
         displayHeader("Reservations for "+formatHost( 1, host));
+        int index = 1;
         for (Reservation reservation : reservations) {
-            io.println(formatReservation(reservation));
+            io.println(formatReservation(index++, reservation));
         }
     }
 
+    public Reservation selectReservation(List<Reservation> reservations, Host host) {
+        if (reservations == null || reservations.isEmpty()) {
+            io.println("No reservations found for "+formatHost( 1, host));
+            return null;
+        }
+        displayHeader("Reservations for "+formatHost( 1, host));
+        if (reservations.size() == 0) {
+            io.println("No reservations found");
+            return null;
+        }
 
+        int index = 1;
+        for (Reservation r : reservations.stream().limit(25).collect(Collectors.toList())) {
+            io.println(formatReservation(index++, r));
+        }
+
+        io.println("0: Exit");
+        String message = String.format("Select a reservation by index [1-%s]: ", index-1);
+
+        index = io.readInt(message, 0, index-1);
+        if (index <= 0) {
+            return null;
+        }
+        return reservations.get(index - 1);
+    }
 
     public Guest selectGuest(List<Guest> guests) {
         if (guests.size() == 0) {
@@ -205,8 +227,8 @@ public class View {
 
     public Boolean displayConfirmation(Reservation reservation) {
         io.println("These are your reservation details so far:");
-        io.println(formatReservation(reservation));
-        return io.readBoolean("Would you like to change these dates?[y or n]");
+        io.println(formatReservation(Integer.parseInt(reservation.getId()), reservation));
+        return io.readBoolean("Would you like to modify these dates before committing?[y or n]");
     }
     public Reservation getDates(Reservation reservation, Host host) {
         while (true) {
