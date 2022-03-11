@@ -3,8 +3,8 @@ package learn.house.ui;
 public enum MainMenuOption {
 
     EXIT(0, "Exit", false),
-    VIEW_RESERVATIONS_BY_HOST(1, "View Reservations By Host", false);
-//    MAKE_NEW_RESERVATION(2, "Make New Reservation", false),
+    VIEW_RESERVATIONS_BY_HOST(1, "View Reservations By Host", false),
+    MAKE_NEW_RESERVATION(2, "Make New Reservation", false);
 //    EDIT_A_RESERVATION(3, "Edit a Reservation", false),
 //    CANCEL_A_RESERVATION(4, "Cancel a Reservation", false);
 //    ADD_HOST(5, "Add a Host", false),

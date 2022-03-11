@@ -1,9 +1,13 @@
 package learn.house.ui;
 
+import learn.house.domain.Response;
+import learn.house.domain.Result;
 import learn.house.models.*;
+import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +15,7 @@ public class View {
 
     private final ConsoleIO io;
     private final String hostTemplate = "%-2s: Standard_Rate_$%-6s  Weekend_Rate_$%-6s  Last_Name_%-20s  Phone_%-13s  Email_%-30s  Address_%-30s %-20s %s %s";
+    private final String guestTemplate = "%-2s:  Last_Name_%-20s  First_Name_%-20s  Phone_%-13s  Email_%-30s  State:_%s";
     private final String reservationTemplate = "%-2s: %s_to_%s    Guest:_%s    Total_Cost:_$%.2f%n";
 
     public View(ConsoleIO io) {
@@ -43,6 +48,10 @@ public class View {
         io.println(message);
         io.println("=".repeat(message.length()));
     }
+    public void displayMessage(String message) {
+        io.println(message);
+    }
+
 
     public void displayException(Exception ex) {
         displayHeader("A critical error occurred:");
@@ -66,6 +75,24 @@ public class View {
                 index++, host.getStandardRate().toString(), host.getWeekendRate().toString(), host.getLastName(),
                 host.getPhone(), host.getEmail(), host.getAddress(), host.getCity(), host.getState(), host.getPostalCode());
     }
+
+    private String formatGuest(int index, Guest guest) {
+        return String.format(guestTemplate,
+                index++, guest.getLastName(), guest.getFirstName(),
+                guest.getPhone(), guest.getEmail(), guest.getState());
+    }
+
+    private String formatReservation (Reservation reservation) {
+        return String.format(reservationTemplate,
+                reservation.getId()==null? "" : reservation.getId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getGuestID(),
+                reservation.getTotal()
+        );
+    }
+
+
 
     public Host selectHost(List<Host> hosts) {
         if (hosts.size() == 0) {
@@ -125,17 +152,85 @@ public class View {
         }
         displayHeader("Reservations for "+formatHost( 1, host));
         for (Reservation reservation : reservations) {
-            io.printf(reservationTemplate,
-                    reservation.getId(),
-                    reservation.getStartDate(),
-                    reservation.getEndDate(),
-                    reservation.getGuestID(),
-                    reservation.getTotal()
-            );
+            io.println(formatReservation(reservation));
         }
     }
 
+
+
+    public Guest selectGuest(List<Guest> guests) {
+        if (guests.size() == 0) {
+            io.println("No guests found");
+            return null;
+        }
+
+        int index = 1;
+        for (Guest guest : guests.stream().limit(25).collect(Collectors.toList())) {
+            io.println(formatGuest(index++, guest));
+        }
+
+        if (guests.size() > 25) {
+            io.println("More than 25 guests found. Showing first 25. Please refine your search.");
+        }
+
+        io.println("0: Exit");
+        String message = String.format("Select a guest by their index [1-%s]: ", index-1);
+
+        index = io.readInt(message, 0, index-1);
+        if (index <= 0) {
+            return null;
+        }
+        return guests.get(index - 1);
+    }
+
+    public Guest getGuestCriteria() {
+        io.println("Enter criteria to filter Guests by equivalence (empty fields will be ignored): ");
+        String id = io.readString("GuestID: ");
+        String firstName = io.readString("First Name: ");
+        String lastName = io.readString("Last Name: ");
+        String email = io.readEmailOptional("Email: ");
+        String phone = io.readString("Phone #: ");
+        States state = io.readStateOptional("State (two letters): ");
+
+        return new Guest(
+                id.equals("") ? null : id,
+                firstName.equals("") ? null : firstName,
+                lastName.equals("") ? null : lastName,
+                email,
+                phone.equals("") ? null : phone,
+                state);
+    }
+
 //    displayHeader("Where would you like to go?");
+
+    public Boolean displayConfirmation(Reservation reservation) {
+        io.println("These are your reservation details so far:");
+        io.println(formatReservation(reservation));
+        return io.readBoolean("Would you like to change these dates?[y or n]");
+    }
+    public Reservation getDates(Reservation reservation, Host host) {
+        while (true) {
+            Response response = new Response();
+            LocalDate start = io.readLocalDate("Select a start date [MM/dd/yyyy]: ");
+            while (start.isBefore(LocalDate.now())) {
+                displayStatus(false, "Start date must be in the future.");
+                start = io.readLocalDate("Select a start date [MM/dd/yyyy]: ");
+
+            }
+            response = reservation.setStartDate(start, host.getStandardRate(), host.getWeekendRate());
+            LocalDate end = io.readLocalDate("Select an end date [MM/dd/yyyy]: ");
+            while (end.isBefore(start)) {
+                displayStatus(false, "End date must be in the future and after the start date.");
+                end = io.readLocalDate("Select an end date [MM/dd/yyyy]: ");
+            }
+            response.addErrorMessages(
+                    reservation.setEndDate(end, host.getStandardRate(), host.getWeekendRate()).getErrorMessages());
+            if (response.isSuccess()) {
+                return reservation;
+            }
+            displayStatus(response.isSuccess(), response.getErrorMessages());
+        }
+    }
 
 
 //    public Item chooseItem(List<Item> items) {
@@ -187,26 +282,7 @@ public class View {
 //        return forager;
 //    }
 //
-//    public GenerateRequest getGenerateRequest() {
-//        displayHeader(MainMenuOption.GENERATE.getMessage());
-//        LocalDate start = io.readLocalDate("Select a start date [MM/dd/yyyy]: ");
-//        if (start.isAfter(LocalDate.now())) {
-//            displayStatus(false, "Start date must be in the past.");
-//            return null;
-//        }
-//
-//        LocalDate end = io.readLocalDate("Select an end date [MM/dd/yyyy]: ");
-//        if (end.isAfter(LocalDate.now()) || end.isBefore(start)) {
-//            displayStatus(false, "End date must be in the past and after the start date.");
-//            return null;
-//        }
-//
-//        GenerateRequest request = new GenerateRequest();
-//        request.setStart(start);
-//        request.setEnd(end);
-//        request.setCount(io.readInt("Generate how many random forages [1-500]?: ", 1, 500));
-//        return request;
-//    }
+
 
 
 

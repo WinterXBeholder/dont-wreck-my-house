@@ -18,4 +18,8 @@ public class Response {
     public void addErrorMessage(String message) {
         messages.add(message);
     }
+
+    public void addErrorMessages(List<String> messages) {
+        messages.forEach(m -> this.messages.add(m));
+    }
 }

@@ -6,6 +6,7 @@ import learn.house.data.GuestRepository;
 import learn.house.models.Guest;
 
 import javax.xml.crypto.Data;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ public class GuestService {
     public List<Guest> getGuests(Guest criteria) throws DataException{
         List<Guest> results = null;
         results = repository.findAll().stream().filter(g -> guestStreamFilter(criteria, g)).collect(Collectors.toList());
+        results.sort(Comparator.comparing(g -> g.getLastName()));
         return results;
     }
 

@@ -5,9 +5,13 @@ import learn.house.data.DataException;
 import learn.house.domain.GuestService;
 import learn.house.domain.HostService;
 import learn.house.domain.ReservationService;
+import learn.house.domain.Result;
+import learn.house.models.Guest;
 import learn.house.models.Host;
+import learn.house.models.Reservation;
 import learn.house.ui.View;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,9 +47,9 @@ public class Controller {
                 case VIEW_RESERVATIONS_BY_HOST:
                     reservationsByHost();
                     break;
-//                case MAKE_NEW_RESERVATION:
-//                    newReservation();
-//                    break;
+                case MAKE_NEW_RESERVATION:
+                    newReservation();
+                    break;
 //                case EDIT_A_RESERVATION:
 //                    editReservation();
 //                    break;
@@ -87,6 +91,34 @@ public class Controller {
         Host criteria = view.getHostCriteria();
         List<Host> hosts = hostService.getHosts(criteria);
         return view.selectHost(hosts);
+    }
+
+    private Guest selectGuest() throws DataException{
+        Guest criteria = view.getGuestCriteria();
+        List<Guest> guests = guestService.getGuests(criteria);
+        return view.selectGuest(guests);
+    }
+
+    private void newReservation() throws DataException {
+        view.displayHeader(MainMenuOption.MAKE_NEW_RESERVATION.getMessage());
+        Guest guest = selectGuest();
+        if(guest == null) return;
+        Host host = selectHost();
+        if( host == null ) return;
+        view.displayMessage("Existing reservations:");
+        view.printReservations(reservationService.resByHostFuture(host.getId()), host);
+        Boolean finish = false;
+        while(!finish) {
+            Reservation newReservation = new Reservation();
+            newReservation = view.getDates(newReservation, host);
+            newReservation.setGuestID(guest.getGuestId());
+            finish = !view.displayConfirmation(newReservation);
+            if (finish) {
+                Result result = reservationService.add(host.getId(), newReservation);
+                finish = result.isSuccess();
+                view.displayStatus(result.isSuccess(), result.getErrorMessages());
+            }
+        }
     }
 
 
