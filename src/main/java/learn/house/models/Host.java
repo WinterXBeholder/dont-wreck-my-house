@@ -20,15 +20,15 @@ public class Host {
     private String address;
     private String city;
     private States state;
-    private String postal_code;
-    private BigDecimal standard_rate;
-    private BigDecimal weekend_rate;
+    private String postalCode;
+    private BigDecimal standardRate;
+    private BigDecimal weekendRate;
 
 
     public Host() {}
 
-    public Host(String id, String lastName, String email, String phone, String address, String city, States state, String postal_code,
-                BigDecimal standard_rate, BigDecimal weekend_rate) {
+    public Host(String id, String lastName, String email, String phone, String address, String city, States state, String postalCode,
+                BigDecimal standardRate, BigDecimal weekendRate) {
         this.id = id;
         this.lastName = lastName;
         this.email = email;
@@ -36,9 +36,9 @@ public class Host {
         this.address = address;
         this.city = city;
         this.state = state;
-        this.postal_code = postal_code;
-        this.standard_rate = standard_rate;
-        this.weekend_rate = weekend_rate;
+        this.postalCode = postalCode;
+        this.standardRate = standardRate;
+        this.weekendRate = weekendRate;
     }
 
     public String getId() {
@@ -91,7 +91,7 @@ public class Host {
         this.city = city;
     }
 
-    public States state() {
+    public States getState() {
         return state;
     }
 
@@ -99,42 +99,47 @@ public class Host {
         this.state = state;
     }
 
-    public String getPostal_code() {
-        return postal_code;
+    public String getPostalCode() {
+        return postalCode;
     }
 
-    public void setPostal_code(String postal_code) {
-        this.postal_code = postal_code;
+    public void setPostalCode(String postal_code) {
+        this.postalCode = postal_code;
     }
 
-    public BigDecimal getStandard_rate() {
-        return standard_rate;
+    public BigDecimal getStandardRate() {
+        return standardRate;
     }
 
-    public void setStandard_rate(BigDecimal standard_rate) {
-        this.standard_rate = standard_rate;
+    public void setStandardRate(BigDecimal standard_rate) {
+        this.standardRate = standard_rate;
     }
 
-    public BigDecimal getWeekend_rate() {
-        return weekend_rate;
+    public BigDecimal getWeekendRate() {
+        return weekendRate;
     }
 
-    public void setWeekend_rate(BigDecimal weekend_rate) {
-        this.weekend_rate = weekend_rate;
+    public void setWeekendRate(BigDecimal weekend_rate) {
+        this.weekendRate = weekend_rate;
     }
 
-/*
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Host host = (Host) o;
-        return id == host.id &&
+        return Objects.equals(id, host.id) &&
                 Objects.equals(lastName, host.lastName) &&
+                Objects.equals(email, host.email) &&
+                Objects.equals(phone, host.phone) &&
+                Objects.equals(address, host.address) &&
+                Objects.equals(city, host.city) &&
                 state == host.state &&
-                Objects.equals(email, host.email);
+                Objects.equals(postalCode, host.postalCode) &&
+                Objects.equals(standardRate, host.standardRate) &&
+                Objects.equals(weekendRate, host.weekendRate);
     }
-*/
 /*
     @Override
     public int hashCode() {

@@ -16,7 +16,7 @@
 
 # Project Plan
 
-> ###Design:
+> ### Design:
 > 
 > Combine Model-View-Controller with Repository+Service designs. Reference sustainable foraging project for examples.
 > 
@@ -30,51 +30,105 @@
 > View or IO. But IO will still have to control validation up to a certain level due to Java being a strictly typed
 > language.
 
-> [] use csv's to create models (host, guest, reservation, result)
+> [X] use csv's to create models (host, guest, reservation, result)
 >
-> [] create data-access layer (repositories)
+> [X] create data-access layer (repositories)
 > 
-> [] implement find-by methods
+> [X] implement find-by methods
 > 
-> [] implement write methods
+> [X] implement write methods
 > 
-> [] implement update methods
+> [X] implement update methods
 > 
-> [] implement delete methods
+> [X] implement delete methods
 > 
-> [] create test data-sets
+> [X] create test data-sets
 > 
-> [] test data-access
+> [X] test data-access
 
-> [] create domain layer (Service) to control repositories
-> 
-> [] implement data validation - users (existing, fields)
+> [X] create domain layer (Service) to control repositories
 >
-> [] implement data validation - hosts (existing, fields)
-> 
-> [] implement data validation - reservations (existing, fields, date overlap)
-> 
-> [] implement list building logic based around UI vision, maybe do UI first
-> 
-> [] create repository doubles
-> 
-> [] test domain layer
 
-> [] create Controller
-> 
-> [] implement menu options
-> 
-> [] implement domain calls
-> 
-> [] implement view calls, which loop while Result object is bad (almost all validation controlled by domain)
+#### Functionality notes guiding Service creation:
+#### SELECT - Host or Guest:
+1. get search criteria
+2. search all
+3. filter by criteria
+4. select host
+#### RESERVATIONS BY HOST:
+1. SELECT
+2. get all reservations
+3. Sort by start date
+#### Make new Reservation:
+1. SELECT guest
+2. SELECT host
+3. RESERVATIONS BY HOST, but filtered to future
+4. enter start and end dates
+5. OVERLAP CHECKER
+6. calculate total by day
+7. Summary
+8. confirmation
+9. Add Reservation
+#### OVERLAP CHECKER:
+1. given host's reservations array
+2. given start and end dates
+3. loop and return
+#### EDIT RESERVATION
+1. SELECT host
+2. RESERVATIONS BY HOST
+3. filter future
+4. change date
+5. update
+#### CANCEL A RESERVATION
+1. SELECT host
+2. RESERVATIONS BY HOST
+3. filter future
+4. delete
 
-> [] create view layer
-> 
-> [] implement view methods
-> 
-> [] create io layer as generic as possible
 
-> [] add Spring dependency injection to the project
+> ** Update: intending to integrate the field validation into the model setter methods
 > 
-> [] implement Spring in App class
+> [X] implement data validation - reservations existing
+> 
+> [X] implement data validation - reservations date overlap
+> 
+> [X] implement data validation - users fields
+>
+> [X] implement data validation - hosts fields
+>
+> [X] implement data validation - reservations fields
+>
+> [X] implement list building logic based around UI vision, maybe do UI first
+> 
+> [X] create repository doubles
+> 
+> [X] test domain layer
+> 
+> [X] implement response classes for validation feedback
+
+> [X] create Controller
+> 
+> [X] implement menu options
+> 
+> [X] implement domain calls
+> 
+> [X] implement view calls, which loop while Result object is bad (almost all validation controlled by domain)
+
+> [X] create view layer
+> 
+> [X] implement view methods
+> 
+> [X] create io layer as generic as possible
+> 
+> [] add guests feature to controller and to view
+> 
+> [X] add make reservation feature to controller and view
+> 
+> [X] add cancel reservation feature to controller and view
+> 
+> [X] add edit reservation feature to controller and view
+
+> [X] add Spring dependency injection to the project
+> 
+> [X] implement Spring in App class
 
