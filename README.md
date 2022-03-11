@@ -106,19 +106,27 @@
 > 
 > [X] implement response classes for validation feedback
 
-> [] create Controller
+> [X] create Controller
 > 
-> [] implement menu options
+> [X] implement menu options
 > 
-> [] implement domain calls
+> [X] implement domain calls
 > 
-> [] implement view calls, which loop while Result object is bad (almost all validation controlled by domain)
+> [X] implement view calls, which loop while Result object is bad (almost all validation controlled by domain)
 
-> [] create view layer
+> [X] create view layer
 > 
-> [] implement view methods
+> [X] implement view methods
 > 
-> [] create io layer as generic as possible
+> [X] create io layer as generic as possible
+> 
+> [] add guests feature to controller and to view
+> 
+> [] add make reservation feature to controller and view
+> 
+> [] add cancel reservation feature to controller and view
+> 
+> [] add edit reservation feature to controller and view
 
 > [] add Spring dependency injection to the project
 > 
