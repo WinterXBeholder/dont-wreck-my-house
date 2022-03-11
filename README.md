@@ -128,7 +128,7 @@
 > 
 > [X] add edit reservation feature to controller and view
 
-> [] add Spring dependency injection to the project
+> [X] add Spring dependency injection to the project
 > 
-> [] implement Spring in App class
+> [X] implement Spring in App class
 
