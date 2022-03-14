@@ -38,7 +38,7 @@ public class Reservation {
                 return result;
             }
             this.startDate = startDate;
-            this.setTotal(weekendRate, weekdayRate);
+            this.setTotal(weekdayRate,weekendRate);
             return result;
         }
         this.startDate = startDate;
@@ -58,7 +58,7 @@ public class Reservation {
                 return result;
             }
             this.endDate = endDate;
-            this.setTotal(weekendRate, weekdayRate);
+            this.setTotal(weekdayRate, weekendRate);
             return result;
         }
         this.endDate = endDate;

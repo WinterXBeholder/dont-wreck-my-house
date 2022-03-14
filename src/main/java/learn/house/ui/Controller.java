@@ -102,9 +102,9 @@ public class Controller {
     private void newReservation() throws DataException {
         view.displayHeader(MainMenuOption.MAKE_NEW_RESERVATION.getMessage());
         Guest guest = selectGuest();
-        if(guest == null) return;
+        if(guest == null) {view.enterToContinue(); return;}
         Host host = selectHost();
-        if( host == null ) return;
+        if( host == null ) {view.enterToContinue(); return;}
         view.displayHeader("Existing future reservations:");
         view.printReservations(reservationService.resByHostFuture(host.getId()), host);
         Boolean finish = false;
@@ -125,7 +125,7 @@ public class Controller {
     private void editReservation() throws DataException {
         view.displayHeader(MainMenuOption.EDIT_A_RESERVATION.getMessage());
         Host host = selectHost();
-        if( host == null ) return;
+        if( host == null ) {view.enterToContinue(); return;}
         view.displayHeader("Existing future reservations:");
         List<Reservation> reservations = reservationService.resByHostFuture(host.getId());
         Reservation oldReservation = view.selectReservation(reservations, host);
@@ -152,6 +152,7 @@ public class Controller {
         Boolean finish = reservations==null || reservations.size()==0;
         while(!finish) {
             Reservation oldReservation = view.selectReservation(reservations, host);
+            if( oldReservation == null ) {view.enterToContinue(); return;}
             finish = view.displayDeleteConfirmation(oldReservation);
             if (finish) {
                 Boolean result = reservationService.cancel(host.getId(), oldReservation);

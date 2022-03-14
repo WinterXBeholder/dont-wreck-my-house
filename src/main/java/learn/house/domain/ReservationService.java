@@ -102,13 +102,13 @@ public class ReservationService {
     private Boolean overlapTest(Reservation r, Reservation n) {
         if ((r.getStartDate().isBefore(n.getStartDate())) &&
                 (r.getStartDate().isBefore(n.getEndDate())) &&
-                (r.getEndDate().isBefore(n.getStartDate())) &&
-                (r.getEndDate().isBefore(n.getEndDate()))) {
+                (r.getEndDate().isBefore(n.getStartDate()) || r.getEndDate().isEqual(n.getStartDate())) &&
+                (r.getEndDate().isBefore(n.getEndDate()) || r.getEndDate().isEqual(n.getEndDate()))) {
             return false;
         } else if ((r.getStartDate().isAfter(n.getStartDate())) &&
-                (r.getStartDate().isAfter(n.getEndDate())) &&
+                (r.getStartDate().isAfter(n.getEndDate()) || r.getStartDate().isEqual(n.getEndDate())) &&
                 (r.getEndDate().isAfter(n.getStartDate())) &&
-                (r.getEndDate().isAfter(n.getEndDate()))) {
+                (r.getEndDate().isAfter(n.getEndDate()) || r.getEndDate().isEqual(n.getEndDate()))) {
             return false;
         }
         return true;
