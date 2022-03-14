@@ -227,7 +227,7 @@ public class View {
 
     public Boolean displayDatesConfirmation(Reservation reservation) {
         io.println("These are your reservation details so far:");
-        io.println(formatReservation(Integer.parseInt(reservation.getId()), reservation));
+        io.println(formatReservation(reservation.getId() == null ? 1 : Integer.parseInt(reservation.getId()), reservation));
         return io.readBoolean("Would you like to modify these dates before committing?[y or n]");
     }
     public Boolean displayDeleteConfirmation(Reservation reservation) {

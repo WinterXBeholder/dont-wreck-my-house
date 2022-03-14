@@ -107,8 +107,8 @@ class ReservationServiceTest {
 
         Reservation sample = new Reservation();
         sample.setId("2");
-        Response res1 = sample.setStartDate(LocalDate.parse("2025-11-12"), host.getWeekendRate(), host.getStandardRate()); // wednesday
-        Response res2 = sample.setEndDate(LocalDate.parse("2025-11-15"), host.getWeekendRate(), host.getStandardRate()); // friday
+        Response res1 = sample.setStartDate(LocalDate.parse("2025-11-12"), host.getStandardRate(),  host.getWeekendRate()); // wednesday
+        Response res2 = sample.setEndDate(LocalDate.parse("2025-11-15"), host.getStandardRate(), host.getWeekendRate()); // friday
         sample.setGuestID("666");
 
         System.out.println(res1.getErrorMessages());
