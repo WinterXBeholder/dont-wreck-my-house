@@ -43,7 +43,7 @@ class GuestServiceTest {
         assertTrue(results.size() == 2);
         assertTrue(criteria.getFirstName().equalsIgnoreCase(results.get(0).getFirstName()));
         assertTrue(results.get(1).getFirstName().equalsIgnoreCase("Sullivan"));
-        assertTrue(results.get(1).getEmail().equalsIgnoreCase("slomas0@mediafire.edu"));
+        assertTrue(results.get(0).getEmail().equalsIgnoreCase("slomas0@mediafire.edu"));
     }
     @Test
     void shouldFindAllGuestsNoCriteria() throws DataException {
